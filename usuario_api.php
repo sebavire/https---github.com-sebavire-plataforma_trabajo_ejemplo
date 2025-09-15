@@ -23,11 +23,16 @@ if ($accion === "insertar") {
     $stmt->bind_param("ss", $nombre, $pass);
 
     if ($stmt->execute()) {
+        // Envia respuesta JSON en lugar de redirigir: 
+        echo json_encode(['success' => true, 'message' => 'Usuario registrado']);
+        
         // Redirigir a index.html (se usará fetch para cargar los datos)
-        header("Location: index.html");
+        //header("Location: index.html");
         exit();
     } else {
-        echo "Error al guardar: " . $stmt->error;
+        echo json_encode(['success' => false, 'error' => $stmt->error]);
+        exit();
+        //echo "Error al guardar: " . $stmt->error;
     }
 }
 elseif ($accion === "listar") {
