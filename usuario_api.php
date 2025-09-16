@@ -72,6 +72,23 @@ elseif ($accion === "login") {
     }
     exit();
 }
+elseif ($accion === "detalle") {
+    $id = $_GET['id'] ?? 0;
+
+    $sql = "SELECT id, nombre, password FROM usuarios WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if ($fila = $resultado->fetch_assoc()) {
+        header('Content-Type: application/json');
+        echo json_encode($fila);
+    } else {
+        echo json_encode(['error' => 'Usuario no encontrado']);
+    }
+    exit();
+}
 
 $conn->close();
 ?>
